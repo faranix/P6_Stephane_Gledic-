@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 
 // Pour les requetes d'images
-app.use('images', express.static(path.join(__dirname, 'images')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/api/sauces', saucesRouter);
 app.use('/api/auth', userRouter);
