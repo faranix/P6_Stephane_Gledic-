@@ -1,7 +1,11 @@
+// === Import des dependances ou fichiers === //
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
+
+// Permet de crée un compte
 exports.userSignup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
@@ -16,6 +20,7 @@ exports.userSignup = (req, res, next) => {
         .catch(error => res.status(400).json({ error }));
 };
 
+// Permet de s'identifier a un compte
 exports.userLogin = (req, res, next) => {
     User.findOne( {email: req.body.email} )
         .then(user => {
@@ -31,7 +36,7 @@ exports.userLogin = (req, res, next) => {
                         userId: user._id,
                         token: jwt.sign(
                             { userId: user._id},
-                            'NE_TROUVE_PAS_LA_CLE_STP_SA_SERAIT_VRAIMENT_SYMPA_DE_VOTRE_PART_MERCI_BIEN',
+                            `${process.env.KEYTOKEN}`,
                             { expiresIn: '24h' }
                         )
                     })

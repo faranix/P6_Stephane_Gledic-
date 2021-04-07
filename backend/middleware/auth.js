@@ -1,11 +1,13 @@
+// === Import des dependances ou fichiers === //
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
-// Crèe un middleware qui vérifie le token
 
+// Un middleware general qui permet de vérifier le token et de le valider avec "next()"
 module.exports = (req, res, next) => {
     try {
         const token = req.headers.authorization.split(' ')[1];
-        const decodeToken = jwt.verify(token, 'NE_TROUVE_PAS_LA_CLE_STP_SA_SERAIT_VRAIMENT_SYMPA_DE_VOTRE_PART_MERCI_BIEN');
+        const decodeToken = jwt.verify(token, `${process.env.KEYTOKEN}`);
         const userId = decodeToken.userId;
 
         if (req.body.userId && req.body.userId !== userId) {

@@ -1,5 +1,4 @@
-// ==== Creation d'un server de base ==== // 
-
+// === Import des dependances ou fichiers === //
 const http = require('http');
 const app = require('./app');
 
