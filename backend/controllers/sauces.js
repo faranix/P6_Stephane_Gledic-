@@ -4,11 +4,11 @@ const fs = require('fs');
 
 // Permet de crée une sauce
 exports.createSauce = (req, res, next) => {
-    const sauceObjet = JSON.parse(req.body.sauce);
+    const sauceObjet = JSON.parse(req.body.sauce);      // Convertir la requete en objet 
     delete sauceObjet._id;
     const sauce = new Sauce({
-        ...sauceObjet,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        ...sauceObjet,      // Copier tout les informations de objet pour crée une sauce
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,       // Recuperer images stocker dans le fichier image
         userId: sauceObjet.userId,
     });
     sauce.save()
@@ -31,8 +31,10 @@ exports.updateSauce = (req, res, next) => {
 exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id})
         .then(sauce => {
-            const filename = sauce.imageUrl.split('/images/')[1];
-            fs.unlink(`images/${filename}`, () => {
+            const filename = sauce.imageUrl.split('/images/')[1];       // Recuperer que le nom de image et pas le dossier 
+
+            // Supprimer tout la sauce avec l'images situer dans notre dossier images
+            fs.unlink(`images/${filename}`, () => {     
                 Sauce.deleteOne({ _id: req.params.id })
                 .then(() => res.status(200).json({ message: 'Sauce Supprimer !'}))
                 .catch(error => res.status(400).json({ error }));
@@ -58,15 +60,13 @@ exports.getAllSauces = (req, res, next) => {
 
 
 // Permet de Like ou deDislike
-
-// TEST
-// --- Probleme: userId ce modifie aux click sur un like --- //
 exports.likeOneSauces = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
             //  ========   USER sans choix  ======= //
             if (req.body.like == 0) {
 
+                // Si userId de utilisateur ce trouve dans le tableau des likes 
                 if (sauce.usersLiked.includes(req.body.userId) == true) {
                     // Recuperer la position de user dans le tableau
                     const index = sauce.usersLiked.indexOf(req.body.userId);
@@ -74,6 +74,7 @@ exports.likeOneSauces = (req, res, next) => {
                     sauce.usersLiked.splice(index, 1);
                 }
 
+                 // Si userId de utilisateur ce trouve dans le tableau des dislikes
                 if (sauce.usersDisliked.includes(req.body.userId) == true) {
                     // Recuperer la position de user dans le tableau
                     const index = sauce.usersDisliked.indexOf(req.body.userId);
@@ -84,27 +85,26 @@ exports.likeOneSauces = (req, res, next) => {
             
             //  ========   USER Like  ======= //
             if (req.body.like == 1) {
-                sauce.usersLiked.push(req.body.userId);
+                sauce.usersLiked.push(req.body.userId);     // Met userId dans le tableau des utilisateur qui ont like
             }
 
            //  ========   USER Dislike  ======= //
 
             if (req.body.like == -1) {
-                sauce.usersDisliked.push(req.body.userId);
+                sauce.usersDisliked.push(req.body.userId);      // Met userId dans le tableau des utilisateur qui ont dislike
             } 
 
-            // Verification si les tableau sont vide
-
+            //  ========   Verification du compteurs de Like ou de Dislikes  ======= //
             if(sauce.usersLiked.length == 0) {
                 sauce.likes = 0;
             } else {
-                sauce.likes = sauce.usersLiked.length;
+                sauce.likes = sauce.usersLiked.length;      // Si les likes sont pas a 0 alors change le nombre de like par rapport au utilisateur dans le tableau userLiked
             };
 
             if(sauce.usersDisliked.length == 0) {
                 sauce.dislikes = 0;
             } else {
-                sauce.dislikes = sauce.usersDisliked.length;
+                sauce.dislikes = sauce.usersDisliked.length;        // Si les likes sont pas a 0 alors change le nombre de like par rapport au utilisateur dans le tableau usersDisliked
             }
 
             sauce.save()

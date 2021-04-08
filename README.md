@@ -8,4 +8,4 @@ DB_MP=azerty123
 
 DB_NAME=P6DB
 
-KEYTOKEN= Entre une clée de votre choix 
+KEYTOKEN= Entre une clé de votre choix 
