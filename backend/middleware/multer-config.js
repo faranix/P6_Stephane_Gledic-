@@ -11,12 +11,15 @@ const MIME_TYPES = {
 // Permet de stoker les fichiers avec un nom unique
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        callback(null, 'images');       // Le fichier de destination ou les images seront stocker
+        // Le fichier de destination ou les images seront stocker
+        callback(null, 'images');       
     },
     filename: (req, file, callback) => {
-        const name = file.originalname.split(' ').join('_');        // remplace les ' ' par '_' pour pas avoir de probleme
+        // remplace les ' ' par '_' pour pas avoir de probleme
+        const name = file.originalname.split(' ').join('_');        
         const extention = MIME_TYPES[file.mimetype];
-        callback(null, name +  Date.now() + '.' + extention);       // Crée un nom unique pour l'image 
+        // Crée un nom unique pour l'image 
+        callback(null, name +  Date.now() + '.' + extention);       
     }
 });
 

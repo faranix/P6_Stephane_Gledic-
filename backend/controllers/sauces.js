@@ -31,7 +31,8 @@ exports.updateSauce = (req, res, next) => {
 exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id})
         .then(sauce => {
-            const filename = sauce.imageUrl.split('/images/')[1];       // Recuperer que le nom de image et pas le dossier 
+            // Recuperer que le nom de image et pas le dossier 
+            const filename = sauce.imageUrl.split('/images/')[1];
 
             // Supprimer tout la sauce avec l'images situer dans notre dossier images
             fs.unlink(`images/${filename}`, () => {     
@@ -85,26 +86,30 @@ exports.likeOneSauces = (req, res, next) => {
             
             //  ========   USER Like  ======= //
             if (req.body.like == 1) {
-                sauce.usersLiked.push(req.body.userId);     // Met userId dans le tableau des utilisateur qui ont like
+                // Met userId dans le tableau des utilisateur qui ont like
+                sauce.usersLiked.push(req.body.userId);     
             }
 
            //  ========   USER Dislike  ======= //
 
             if (req.body.like == -1) {
-                sauce.usersDisliked.push(req.body.userId);      // Met userId dans le tableau des utilisateur qui ont dislike
+                // Met userId dans le tableau des utilisateur qui ont dislike
+                sauce.usersDisliked.push(req.body.userId);     
             } 
 
             //  ========   Verification du compteurs de Like ou de Dislikes  ======= //
             if(sauce.usersLiked.length == 0) {
                 sauce.likes = 0;
             } else {
-                sauce.likes = sauce.usersLiked.length;      // Si les likes sont pas a 0 alors change le nombre de like par rapport au utilisateur dans le tableau userLiked
+                // Si les likes sont pas a 0 alors change le nombre de like par rapport au utilisateur dans le tableau userLiked
+                sauce.likes = sauce.usersLiked.length;      
             };
 
             if(sauce.usersDisliked.length == 0) {
                 sauce.dislikes = 0;
             } else {
-                sauce.dislikes = sauce.usersDisliked.length;        // Si les likes sont pas a 0 alors change le nombre de like par rapport au utilisateur dans le tableau usersDisliked
+                // Si les likes sont pas a 0 alors change le nombre de like par rapport au utilisateur dans le tableau usersDisliked
+                sauce.dislikes = sauce.usersDisliked.length;        
             }
 
             sauce.save()
