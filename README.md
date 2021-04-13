@@ -2,7 +2,7 @@
 
 ## Backend
 
-## Initaliser le projet
+#### Initaliser le projet
 
 Exécuter `npm install` votre version de nodejs doit être en version `v10.19.0` pour vérifier votre version utiliser `node -v` puis exécuter `nodemon server.js` 
 pour lancer le server nodejs
