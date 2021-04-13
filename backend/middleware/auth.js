@@ -7,10 +7,12 @@ require('dotenv').config();
 module.exports = (req, res, next) => {
     try {
         const token = req.headers.authorization.split(' ')[1];
-        const decodeToken = jwt.verify(token, `${process.env.KEYTOKEN}`);       // Verification du token qui correption bien a la clé
+         // Verification du token qui correption bien a la clé
+        const decodeToken = jwt.verify(token, `${process.env.KEYTOKEN}`);      
         const userId = decodeToken.userId;
 
-        if (req.body.userId && req.body.userId !== userId) {        // Verifie que userId de la requete et bien celui de la database
+        // Verifie que userId de la requete et bien celui de la database
+        if (req.body.userId && req.body.userId !== userId) {        
             throw 'User Id non valable !';
         } else {
             next();     // Si oui passe au prochain middleware
